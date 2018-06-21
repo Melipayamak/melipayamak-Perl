@@ -24,7 +24,7 @@
 </div>
 
 
-```js
+```perl
 my $username = "username";
 my $password = "password";
 my $from = "5000...";
