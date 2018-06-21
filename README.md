@@ -42,7 +42,7 @@ $soapClient->SendSimpleSMS(@to, $from, $text, $isFlash);
 از آنجا که وب سرویس ملی پیامک تنها محدود به ارسال پیامک نیست شما از طریق زیر میتوانید به وب سرویس ها دسترسی کامل داشته باشید:
 </div>
 
-```js
+```perl
 // وب سرویس پیامک
 my $restClient = new RestClient($username, $password);
 my $soapClient = new SoapClient($username, $password);
@@ -72,7 +72,7 @@ my $soapClient = new SoapClient($username, $password);
 
 #### ارسال
 
-```js
+```perl
 restClient->Send($to, $from, $text, $isFlash);
 soapClient->SendSimpleSMS(@to , $from, $text, $isFlash);
 ```
@@ -81,7 +81,7 @@ soapClient->SendSimpleSMS(@to , $from, $text, $isFlash);
 </div>
 
 #### دریافت وضعیت ارسال
-```js
+```perl
 restClient->GetDelivery($recId);
 soapClient->GetDelivery($recId);
 soapClient->GetDeliveries(@recIds);
@@ -89,7 +89,7 @@ soapClient->GetDeliveries(@recIds);
 
 #### لیست پیامک ها
 
-```js
+```perl
 restClient->GetMessages($location, $index, $count, $from);
 soapClient->getMessages($location, $from, $index, $count);
 // جهت دریافت به صورت رشته ای
@@ -100,83 +100,83 @@ soapClient->GetUsersMessagesByDate($location, $from, $index, $count, $dateFrom, 
 ```
 
 #### موجودی
-```js
+```perl
 restClient->GetCredit();
 soapClient->GetCredit();
 ```
 
 #### تعرفه پایه / دریافت قیمت قبل از ارسال
-```js
+```perl
 restClient->GetBasePrice();
 soapClient->GetSmsPrice($irancellCount, $mtnCount, $from, $text);
 ```
 #### لیست شماره اختصاصی
-```js
+```perl
 soapClient->GetUserNumbers();
 ```
 
 #### بررسی تعداد پیامک های دریافتی
-```js
+```perl
 soapClient->GetInboxCount($isRead);
 //پیش فرض خوانده نشده 
 ```
 
 #### ارسال پیامک پیشرفته
-```js
+```perl
 soapClient->SendSms(@to, $from, $text, $isflash, $udh, @recId, @status);
 ```
 
 #### مشاهده مشخصات پیام
-```js
+```perl
 soapClient->GetMessagesReceptions($msgId, $fromRows);
 ```
 
 
 #### حذف پیام دریافتی
-```js
+```perl
 soapClient->RemoveMessages2($location, $msgIds);
 ```
 
 
 #### ارسال زماندار
-```js
+```perl
 soapClient->AddSchedule($to, $from, $text, $isflash, $scheduleDateTime, $period);
 ```
 
 #### ارسال زماندار متناظر
-```js
+```perl
 soapClient->AddMultipleSchedule(@to, $from, @text, $isflash, @scheduleDateTime, $period);
 ```
 
 
 #### ارسال سررسید
-```js
+```perl
 soapClient->AddNewUsance($to, $from, $text, $isflash, $scheduleStartDateTime, $countRepeat, $scheduleEndDateTime, $periodType);
 ```
 
 #### مشاهده وضعیت ارسال زماندار
-```js
+```perl
 soapClient->GetScheduleStatus($schId);
 ```
 
 #### حذف پیامک زماندار
-```js
+```perl
 soapClient->RemoveSchedule($schId);
 ```
 
 
 ####  ارسال پیامک همراه با تماس صوتی
-```js
+```perl
 soapClient->SendSMSWithSpeechText($smsBody, $speechBody, $from, $to);
 ```
 
 ####  ارسال پیامک همراه با تماس صوتی به صورت زمانبندی
-```js
+```perl
 soapClient->SendSMSWithSpeechTextBySchduleDate($smsBody, $speechBody, $from, $to, $scheduleDate);
 ```
 
 ####  دریافت وضعیت پیامک همراه با تماس صوتی 
-```js
+```perl
 soapClient->GetSendSMSWithSpeechTextStatus($recId);
 ```
 <div dir='rtl'>
@@ -186,71 +186,71 @@ soapClient->GetSendSMSWithSpeechTextStatus($recId);
 </div>
 
 #### دریافت شناسه شاخه های بانک شماره
-```js
+```perl
 soapClient->GetBranchs($owner);
 ```
 
 
 #### اضافه کردن یک بانک شماره جدید
-```js
+```perl
 soapClient->AddBranch($branchName, $owner);
 ```
 
 #### اضافه کردن شماره به بانک
-```js
+```perl
 soapClient->AddNumber($branchId, @mobileNumbers);
 ```
 
 #### حذف یک بانک
-```js
+```perl
 soapClient->RemoveBranch($branchId);
 ```
 
 #### ارسال انبوه از طریق بانک
-```js
+```perl
 soapClient->AddBulk($from, $branch, $bulkType, $title, $message, $rangeFrom, $rangeTo, $DateToSend, $requestCount, $rowFrom);
 ```
 
 #### تعداد شماره های موجود
-```js
+```perl
 soapClient->GetBulkCount($branch, $rangeFrom, $rangeTo);
 ```
 
 #### گزارش گیری از ارسال انبوه
-```js
+```perl
 soapClient->GetBulkReceptions($bulkId, $fromRows);
 ```
 
 
 #### تعیین وضعیت ارسال 
-```js
+```perl
 soapClient->GetBulkStatus($bulkId, $sent, $failed, $status);
 ```
 
 #### تعداد ارسال های امروز
-```js
+```perl
 soapClient->GetTodaySent();
 ```
 
 #### تعداد ارسال های کل
 
-```js
+```perl
 soapClient->GetTotalSent();
 ```
 
 #### حذف ارسال منطقه ای
-```js
+```perl
 soapClient->RemoveBulk($bulkId);
 ```
 
 #### ارسال متناظر
-```js
+```perl
 soapClient->SendMultipleSMS(@to, $from, @text, $isflash, $udh, @recId, $status);
 ```
 
 #### نمایش دهنده وضعیت گزارش گیری
 
-```js
+```perl
 soapClient->UpdateBulkDelivery($bulkId);
 ```
 <div dir='rtl'>
@@ -260,34 +260,34 @@ soapClient->UpdateBulkDelivery($bulkId);
 </div>
 
 #### ثبت تیکت جدید
-```js
+```perl
 soapClient->AddTicket($title, $content, $aletWithSms);
 ```
 
 #### جستجو و دریافت تیکت ها
 
-```js
+```perl
 soapClient->GetReceivedTickets($ticketOwner, $ticketType, $keyword);
 ```
 
 #### دریافت تعداد تیکت های کاربران
-```js
+```perl
 soapClient->GetReceivedTicketsCount($ticketType);
 ```
 
 #### دریافت تیکت های ارسال شده
-```js
+```perl
 soapClient->GetSentTickets($ticketOwner, $ticketType, $keyword);
 ```
 
 #### دریافت تعداد تیکت های ارسال شده
-```js
+```perl
 soapClient->GetSentTicketsCount($ticketType);
 ```
 
 
 #### پاسخگویی به تیکت
-```js
+```perl
 soapClient->ResponseTicket($ticketId, $type, $content, $alertWithSms);
 ```
 <div dir='rtl'>
@@ -297,40 +297,40 @@ soapClient->ResponseTicket($ticketId, $type, $content, $alertWithSms);
 </div>
 
 #### اضافه کردن گروه جدید
-```js
+```perl
 soapClient->AddGroup($groupName, $Descriptions, $showToChilds);
 ```
 
 #### اضافه کردن کاربر جدید
-```js
+```perl
 soapClient->AddContact(options);
 
 ```
 
 #### بررسی موجود بودن شماره در دفترچه تلفن
-```js
+```perl
 soapClient->CheckMobileExistInContact($mobileNumber);
 ```
 
 #### دریافت اطلاعات دفترچه تلفن
-```js
+```perl
 soapClient->GetContacts($groupId, $keyword, $count);
 ```
 #### دریافت گروه ها
-```js
+```perl
 soapClient->GetGroups();
 ```
 #### ویرایش مخاطب
-```js
+```perl
 soapClient->ChangeContact(options);
 ```
 
 #### حذف مخاطب
-```js
+```perl
 soapClient->RemoveContact($mobilenumber);
 ```
 #### دریافت اطلاعات مناسبت های فرد
-```js
+```perl
 soapClient->GetContactEvents($contactId);
 ```
 
@@ -341,93 +341,93 @@ soapClient->GetContactEvents($contactId);
 </div>
 
 #### ثبت فیش واریزی
-```js
+```perl
 soapClient->AddPayment(options);
 ```
 
 #### اضافه کردن کاربر جدید در سامانه
-```js
+```perl
 soapClient->AddUser(options);
 
 ```
 
 #### اضافه کردن کاربر جدید در سامانه(کامل)
-```js
+```perl
 soapClient->AddUserComplete(options);
 ```
 
 #### اضافه کردن کاربر جدید در سامانه(WithLocation)
-```js
+```perl
 soapClient->AddUserWithLocation(options);
 ```
 #### بدست آوردن ID کاربر
-```js
+```perl
 soapClient->AuthenticateUser();
 ```
 #### تغییر اعتبار
-```js
+```perl
 soapClient->ChangeUserCredit($amount, $description, $targetUsername, $GetTax);
 ```
 
 #### فراموشی رمز عبور
-```js
+```perl
 soapClient->ForgotPassword($mobileNumber, $emailAddress, $targetUsername);
 ```
 #### دریافت تعرفه پایه کاربر
-```js
+```perl
 soapClient->GetUserBasePrice($targetUsername);
 ```
 
 #### دریافت اعتبار کاربر
-```js
+```perl
 soapClient->GetUserCredit($targetUsername);
 ```
 
 #### دریافت مشخصات کاربر
-```js
+```perl
 soapClient->GetUserDetails($targetUsername);
 ```
 
 #### دریافت شماره های کاربر
-```js
+```perl
 soapClient->GetUserNumbers();
 ```
 
 #### دریافت تراکنش های کاربر
-```js
+```perl
 soapClient->GetUserTransactions($targetUsername, $creditType, $dateFrom, $dateTo, $keyword);
 ```
 
 #### دریافت اطلاعات  کاربران
-```js
+```perl
 soapClient->GetUsers();
 ```
 
 
 #### دریافت اطلاعات  فیلترینگ
-```js
+```perl
 soapClient->HasFilter($text);
 ```
 
 
 ####  حذف کاربر
-```js
+```perl
 soapClient->RemoveUser($targetUsername);
 ```
 
 
 #### مشاهده استان ها
-```js
+```perl
 soapClient->GetProvinces();
 ```
 
 #### مشاهده کد شهرستان 
-```js
+```perl
 soapClient->GetCities($provinceId);
 ```
 
 
 #### مشاهده تاریخ انقضای کاربر 
-```js
+```perl
 soapClient->GetExpireDate();
 ```
