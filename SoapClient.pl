@@ -96,7 +96,34 @@ sub SendWithDomain {
 	$request->content_type("text/xml; charset=utf-8");
 	my $response = $ua->request($request);
 	print $response->as_string;
-}   
+}  
+sub SendByBaseNumber {
+
+	my( $self, @text, $to, $bodyId ) = @_;
+	my $_text = "<string>" . join("</string><string>", @text) . "</string>";
+	my $method = 'SendByBaseNumber';
+	my $envelope = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><$method xmlns=\"http://tempuri.org/\"><username>$self->{_username}</username><password>$self->{_password}</password><text>$_text</text><to>$to</to><bodyId>$bodyId</bodyId></$method></soap:Body></soap:Envelope>";
+
+    my $ua = LWP::UserAgent->new();
+    my $request = HTTP::Request->new(POST => _sendURL);
+	$request->content($envelope);
+	$request->content_type("text/xml; charset=utf-8");
+	my $response = $ua->request($request);
+	print $response->as_string;
+}
+sub SendByBaseNumber2 {
+
+	my( $self, @text, $to, $bodyId ) = @_;
+	my $method = 'SendByBaseNumber2';
+	my $envelope = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><$method xmlns=\"http://tempuri.org/\"><username>$self->{_username}</username><password>$self->{_password}</password><text>$text</text><to>$to</to><bodyId>$bodyId</bodyId></$method></soap:Body></soap:Envelope>";
+
+    my $ua = LWP::UserAgent->new();
+    my $request = HTTP::Request->new(POST => _sendURL);
+	$request->content($envelope);
+	$request->content_type("text/xml; charset=utf-8");
+	my $response = $ua->request($request);
+	print $response->as_string;
+} 
 sub getMessages {
 
 	my( $self, $location, $from, $index, $count ) = @_;
