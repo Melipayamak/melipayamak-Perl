@@ -48,6 +48,25 @@ sub SendSMS {
 	print $cgi->header(), $content;
 }
 
+sub SendByBaseNumber {
+
+	my( $self, $text, $to, $bodyId ) = @_;
+
+    my $ua = LWP::UserAgent->new();
+	my $response = $ua->post( URL . 'BaseServiceNumber', { 
+		'username' => $self->{_username}, 
+		'password' => $self->{_password}, 
+		'text' => $text,
+		'to' => $to,
+		'bodyId' => $bodyId
+	});
+
+	my $content  = $response->decoded_content();
+
+	my $cgi = CGI->new();
+	print $cgi->header(), $content;
+}
+
 sub GetDeliveries2 {
 	
 	my( $self, $recID ) = @_;
