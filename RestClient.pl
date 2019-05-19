@@ -94,7 +94,7 @@ sub GetMessages {
 		'password' => $self->{_password}, 
 		'location' => $location,
 		'from' => $from,
-		'index' => $text,
+		'index' => $index,
 		'count' => $count
 	});
 
