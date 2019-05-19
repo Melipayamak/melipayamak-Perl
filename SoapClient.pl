@@ -19,7 +19,7 @@ BEGIN {  # BEGIN means this will all happen at compile time
     use constant _scheduleURL => 'https://api.payamak-panel.com/post/schedule.asmx';
     use constant _ticketsURL => 'https://api.payamak-panel.com/post/tickets.asmx';
     use constant _usersURL => 'https://api.payamak-panel.com/post/users.asmx';
-    use constant _voiceURL => 'https://api.payamak-panel.com/post/voice.asmx';
+    use constant _voicexURL => 'https://api.payamak-panel.com/post/voice.asmx';
 }
 
 
@@ -110,7 +110,7 @@ sub SendByBaseNumber {
 }
 sub SendByBaseNumber2 {
 
-    my( $self, @text, $to, $bodyId ) = @_;
+    my( $self, $text, $to, $bodyId ) = @_;
     my $method = 'SendByBaseNumber2';
     my $envelope = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><$method xmlns=\"http://tempuri.org/\"><username>$self->{_username}</username><password>$self->{_password}</password><text>$text</text><to>$to</to><bodyId>$bodyId</bodyId></$method></soap:Body></soap:Envelope>";
 
@@ -1317,7 +1317,7 @@ sub GetSendSMSWithSpeechTextStatus {
     my $envelope = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><$method xmlns=\"http://tempuri.org/\"><username>$self->{_username}</username><password>$self->{_password}</password><recId>$recId</recId></$method></soap:Body></soap:Envelope>";
 
     my $ua = LWP::UserAgent->new();
-    my $request = HTTP::Request->new(POST => _voiceURL);
+    my $request = HTTP::Request->new(POST => _voicexURL);
     $request->content($envelope);
     $request->content_type("text/xml; charset=utf-8");
     my $response = $ua->request($request);
@@ -1331,7 +1331,7 @@ sub SendBulkSpeechText {
     my $envelope = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><$method xmlns=\"http://tempuri.org/\"><username>$self->{_username}</username><password>$self->{_password}</password><title>$title</title><body>$body</body><receivers>$receivers</receivers><DateToSend>$DateToSend</DateToSend><repeatCount>$repeatCount</repeatCount></$method></soap:Body></soap:Envelope>";
 
     my $ua = LWP::UserAgent->new();
-    my $request = HTTP::Request->new(POST => _voiceURL);
+    my $request = HTTP::Request->new(POST => _voicexURL);
     $request->content($envelope);
     $request->content_type("text/xml; charset=utf-8");
     my $response = $ua->request($request);
@@ -1345,7 +1345,7 @@ sub SendBulkVoiceSMS {
     my $envelope = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><$method xmlns=\"http://tempuri.org/\"><username>$self->{_username}</username><password>$self->{_password}</password><title>$title</title><voiceFileId>$voiceFileId</voiceFileId><receivers>$receivers</receivers><DateToSend>$DateToSend</DateToSend><repeatCount>$repeatCount</repeatCount></$method></soap:Body></soap:Envelope>";
 
     my $ua = LWP::UserAgent->new();
-    my $request = HTTP::Request->new(POST => _voiceURL);
+    my $request = HTTP::Request->new(POST => _voicexURL);
     $request->content($envelope);
     $request->content_type("text/xml; charset=utf-8");
     my $response = $ua->request($request);
@@ -1359,7 +1359,7 @@ sub SendSMSWithSpeechText {
     my $envelope = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><$method xmlns=\"http://tempuri.org/\"><username>$self->{_username}</username><password>$self->{_password}</password><smsBody>$smsBody</smsBody><speechBody>$speechBody</speechBody><from>$from</from><to>$to</to></$method></soap:Body></soap:Envelope>";
 
     my $ua = LWP::UserAgent->new();
-    my $request = HTTP::Request->new(POST => _voiceURL);
+    my $request = HTTP::Request->new(POST => _voicexURL);
     $request->content($envelope);
     $request->content_type("text/xml; charset=utf-8");
     my $response = $ua->request($request);
@@ -1373,7 +1373,7 @@ sub SendSMSWithSpeechTextBySchduleDate {
     my $envelope = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><$method xmlns=\"http://tempuri.org/\"><username>$self->{_username}</username><password>$self->{_password}</password><smsBody>$smsBody</smsBody><speechBody>$speechBody</speechBody><from>$from</from><to>$to</to><scheduleDate>$scheduleDate</scheduleDate></$method></soap:Body></soap:Envelope>";
 
     my $ua = LWP::UserAgent->new();
-    my $request = HTTP::Request->new(POST => _voiceURL);
+    my $request = HTTP::Request->new(POST => _voicexURL);
     $request->content($envelope);
     $request->content_type("text/xml; charset=utf-8");
     my $response = $ua->request($request);
@@ -1387,7 +1387,7 @@ sub UploadVoiceFile {
     my $envelope = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><$method xmlns=\"http://tempuri.org/\"><username>$self->{_username}</username><password>$self->{_password}</password><title>$title</title><base64StringFile>$base64StringFile</base64StringFile></$method></soap:Body></soap:Envelope>";
 
     my $ua = LWP::UserAgent->new();
-    my $request = HTTP::Request->new(POST => _voiceURL);
+    my $request = HTTP::Request->new(POST => _voicexURL);
     $request->content($envelope);
     $request->content_type("text/xml; charset=utf-8");
     my $response = $ua->request($request);
