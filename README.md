@@ -171,6 +171,11 @@ $soapClient->GetScheduleStatus($schId);
 $soapClient->RemoveSchedule($schId);
 ```
 
+<div dir='rtl'>
+
+### وب سرویس پیامک صوتی
+
+</div>
 
 ####  ارسال پیامک همراه با تماس صوتی
 ```perl
@@ -186,6 +191,22 @@ $soapClient->SendSMSWithSpeechTextBySchduleDate($smsBody, $speechBody, $from, $t
 ```perl
 $soapClient->GetSendSMSWithSpeechTextStatus($recId);
 ```
+
+#### تماس انبوه زماندار
+```perl
+$soapClient->SendBulkSpeechText($title, $body, $receivers, $DateToSend, $repeatCount);
+```
+
+#### تماس انبوه زماندار با انتخاب فایل
+```perl
+$soapClient->SendBulkVoiceSMS($title, $voiceFileId, $receivers, $DateToSend, $repeatCount);
+```
+
+#### آپلود فایل صوتی
+```perl
+$soapClient->UploadVoiceFile($title, $base64StringFile);
+```
+
 <div dir='rtl'>
   
 ### وب سرویس ارسال انبوه/منطقه ای
