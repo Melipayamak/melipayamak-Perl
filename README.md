@@ -3,7 +3,7 @@
 ![Perl](https://img.shields.io/badge/Perl-5.38-39457E?logo=perl&logoColor=white)
 ![License](https://img.shields.io/github/license/melipayamak/melipayamak-Perl)
 ![CPAN](https://img.shields.io/badge/CPAN-compatible-blue?logo=perl)
-![PerlCritic](https://img.shields.io/badge/PerlCritic-enabled-brightgreen)
+![Status](https://img.shields.io/badge/Status-Stable-brightgreen)
 ![Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen)
 
 <div dir='rtl'>
