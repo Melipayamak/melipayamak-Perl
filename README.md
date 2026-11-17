@@ -39,7 +39,7 @@ my $text = "تست وب سرویس ملی پیامک";
 my $isFlash = false;
 my $soapClient = new SoapClient($username, $password);
 $soapClient->SendSimpleSMS2($to, $from, $text, $isFlash);
-//یا برای ارسال به مجموعه ای از مخاطبین
+# یا برای ارسال به مجموعه ای از مخاطبین
 $soapClient->SendSimpleSMS(@to, $from, $text, $isFlash);
 ```
 
@@ -49,7 +49,6 @@ $soapClient->SendSimpleSMS(@to, $from, $text, $isFlash);
 </div>
 
 ```perl
-// وب سرویس پیامک
 my $restClient = new RestClient($username, $password);
 my $soapClient = new SoapClient($username, $password);
 ```
@@ -105,11 +104,11 @@ $soapClient->GetDeliveries(@recIds);
 ```perl
 $restClient->GetMessages($location, $index, $count, $from);
 $soapClient->getMessages($location, $from, $index, $count);
-// جهت دریافت به صورت رشته ای
+# جهت دریافت به صورت رشته ای
 $soapClient->GetMessagesByDate($location, $from, $index, $count, $dateFrom, $dateTo);
-//جهت دریافت بر اساس تاریخ
+# جهت دریافت بر اساس تاریخ
 $soapClient->GetUsersMessagesByDate($location, $from, $index, $count, $dateFrom, $dateTo);
-// جهت دریافت پیام های کاربران بر اساس تاریخ 
+# جهت دریافت پیام های کاربران بر اساس تاریخ 
 ```
 
 #### موجودی
