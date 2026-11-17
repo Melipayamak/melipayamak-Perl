@@ -12,7 +12,7 @@ BEGIN {  # BEGIN means this will all happen at compile time
 
     $INC{'Constants.pm'}++;     # tell `require` that the package is loaded
     use base 'Exporter';        # setup package to export
-    our @EXPORT_OK = qw( _sendURL _receiveURL _contactsURL _actionsURL _scheduleURL _ticketsURL _usersURL _voicexURL );  # what to export
+    our @EXPORT_OK = qw( _sendURL _receiveURL _contactsURL _actionsURL _scheduleURL _ticketsURL _usersURL _voicexURL _newBulksURL _smartURL _blackListURL);  # what to export
 
     use constant _sendURL => 'https://api.payamak-panel.com/post/send.asmx';
     use constant _receiveURL => 'https://api.payamak-panel.com/post/receive.asmx';
@@ -22,12 +22,15 @@ BEGIN {  # BEGIN means this will all happen at compile time
     use constant _ticketsURL => 'https://api.payamak-panel.com/post/tickets.asmx';
     use constant _usersURL => 'https://api.payamak-panel.com/post/users.asmx';
     use constant _voicexURL => 'https://api.payamak-panel.com/post/voice.asmx';
+    use constant _newBulksURL => 'https://api.payamak-panel.com/post/newbulks.asmx';
+    use constant _smartURL => 'https://api.payamak-panel.com/post/Smartsms.asmx';
+    use constant _blackListURL => 'https://api.payamak-panel.com/post/blacklist.asmx';
 }
 
 
 package SoapClient;
 
-use Constants qw( _sendURL _receiveURL _contactsURL _actionsURL _scheduleURL _ticketsURL _usersURL _voicexURL );  # use it like normal
+use Constants qw( _sendURL _receiveURL _contactsURL _actionsURL _scheduleURL _ticketsURL _usersURL _voicexURL _newBulksURL _smartURL _blackListURL);  # use it like normal
 
 sub new {
     my $class = shift;
@@ -147,8 +150,7 @@ sub buildSoapBody {
 sub SendSimpleSMS2 {
     # TODO: use buildSoapBody for the old methods too
     my( $self, $to, $from, $text, $flash ) = @_;
-    my $body = $self->buildSoapBody(
-        'SendSimpleSMS2',
+    my $body = $self->buildSoapBody('SendSimpleSMS2',
         [
             ['to',    $to],
             ['from',  $from],
@@ -1011,7 +1013,356 @@ sub UploadVoiceFile {
 
 
 
+# v2
+
+sub SendByBaseNumber3 {
+    my ( $self, $text, $to) = @_;
+    my $body = $self->buildSoapBody('SendByBaseNumber3',
+        [
+            ['to',    $to],
+            ['text',  $text]
+        ]
+    );
+
+    $self->makeRequest(_sendURL, $body);
+}
+
+sub SendByBaseNumber4 {
+    my ($self, $text, $to, $bodyId, $smsPrice) = @_;
+    my $body = $self->buildSoapBody('SendByBaseNumber4',
+        [
+            ['to',    $to],
+            ['text',  $text],
+            ['bodyId', $bodyId],
+            ['smsPrice', $smsPrice]
+        ]
+    );
+
+    $self->makeRequest(_sendURL, $body);
+}
+
+
+sub SendOtp2 {
+    my ($self, $to, $from, $code) = @_;
+    my $body = $self->buildSoapBody('SendOtp2',
+        [
+            ['to',    $to],
+            ['from',  $from],
+            ['code', $code]
+        ]
+    );
+
+    $self->makeRequest(_sendURL, $body);
+}
+
+sub SendSms2 {
+    my ($self, @to, $from, $text, $isflash, $udh) = @_;
+    my $body = $self->buildSoapBody('SendSms2',
+        [
+            ['to',    @to],
+            ['from', $from],
+            ['text',  $text],
+            ['isflash', $isflash],
+            ['udh', $udh]
+        ]
+    );
+
+    $self->makeRequest(_sendURL, $body);
+}
+
+sub AddContact2 {
+    my ($self, $groupIds, $firstname, $lastname, $gender, $corporation, $mobilenumber) = @_;
+    my $body = $self->buildSoapBody('AddContact2',
+        [
+            ['groupIds',    $groupIds],
+            ['firstname', $firstname],
+            ['lastname',  $lastname],
+            ['gender', $gender],
+            ['corporation', $corporation],
+            ['mobilenumber', $mobilenumber]
+        ]
+    );
+
+    $self->makeRequest(_contactsURL, $body);
+}
+
+sub ChangeContact2 {
+    my ($self, $contactId, $mobilenumber, $firstname, $lastname, $nickname, $corporation, $phone, $fax, $email,
+        $gender, $province, $city, $address, $postalCode, $additionaltext, $descriptions, $contactStatus, $birthdate) = @_;
+    my $body = $self->buildSoapBody('ChangeContact2',
+        [
+            ['contactId', $contactId],
+            ['mobilenumber', $mobilenumber],
+            ['firstname', $firstname],
+            ['lastname', $lastname],
+            ['nickname', $nickname],
+            ['corporation', $corporation],
+            ['phone', $phone],
+            ['fax', $fax],
+            ['email', $email],
+            ['gender', $gender],
+            ['province', $province],
+            ['city', $city],
+            ['address', $address],
+            ['postalCode', $postalCode],
+            ['additionaltext', $additionaltext],
+            ['descriptions', $descriptions],
+            ['contactStatus', $contactStatus],
+            ['birthdate', $birthdate]
+        ]
+    );
+
+    $self->makeRequest(_contactsURL, $body);
+}
+
+
+sub RemoveContact2 {
+    my ($self, $contactId, $groupId) = @_;
+    my $body = $self->buildSoapBody('RemoveContact2',
+        [
+            ['groupId', $groupId],
+            ['contactId', $contactId]
+        ]
+    );
+
+    $self->makeRequest(_contactsURL, $body);
+}
+
+sub GetMultipleSMS3Deliveries {
+    my ($self, @Id) = @_;
+    my $body = $self->buildSoapBody('GetMultipleSMS3Deliveries',
+        [
+            ['Id', 'long', @Id]
+        ]
+    );
+
+    $self->makeRequest(_actionsURL, $body);
+}
+
+
+sub AddScheduleSendByBaseNumber2 {
+    my ($self, $text, $to, $bodyId, $scheduleDate) = @_;
+    my $body = $self->buildSoapBody('AddScheduleSendByBaseNumber2',
+    [
+        ['text', $text],
+        ['to', $to],
+        ['bodyId', $bodyId],
+        ['scheduleDate', $scheduleDate]
+    ]);
+
+    $self->makeRequest(_scheduleURL, $body);
+}
+
+sub GetScheduleDetails {
+    my ($self, $scheduleId) = @_;
+    my $body = $self->buildSoapBody('GetScheduleDetails',
+    [
+        ['scheduleId', $scheduleId]
+    ]);
+
+    $self->makeRequest(_scheduleURL, $body);
+}
+
+sub GetSendSpeechTextStatus {
+    my ($self, $recId) = @_;
+    my $body = $self->buildSoapBody('GetSendSpeechTextStatus',
+    [
+        ['recId', $recId]
+    ]);
+
+    $self->makeRequest(_voicexURL, $body);
+}
+
+sub GetSendSpeechTextStatuses {
+    my ($self, @recIds) = @_;
+    my $body = $self->buildSoapBody('GetSendSpeechTextStatuses',
+    [
+        ['recIds', 'long', @recIds]
+    ]);
+
+    $self->makeRequest(_voicexURL, $body);
+}
+
+sub SendSpeechText {
+    my ($self, $text, $to) = @_;
+    my $body = $self->buildSoapBody('SendSpeechText',
+    [
+        ['text', $text],
+        ['to', $to]
+    ]);
+
+    $self->makeRequest(_voicexURL, $body);
+}
+
+sub SendVoiceOtp {
+    my ($self, $to, $code) = @_;
+    my $body = $self->buildSoapBody('SendVoiceOtp',
+    [
+        ['code', $code],
+        ['to', $to]
+    ]);
+
+    $self->makeRequest(_voicexURL, $body);
+}
+
+sub AddNumberBulk {
+    my ($self, $from , $title, $message, $receivers, $DateToSend) = @_;
+    my $body = $self->buildSoapBody('AddNumberBulk',
+    [
+        ['from', $from],
+        ['title', $title],
+        ['message', $message],
+        ['receivers', $receivers],
+        ['DateToSend', $DateToSend]
+    ]);
+
+    $self->makeRequest(_newBulksURL, $body);
+}
+
+sub AddNumberBulk2 {
+    my ($self, $from, $_body, @to) = @_;
+    my $body = $self->buildSoapBody('AddNumberBulk2',
+    [
+        ['from', $from],
+        ['body', $_body],
+        ['to', @to]
+    ]);
+
+    $self->makeRequest(_newBulksURL, $body);
+}
+
+sub GetBulkDeliveries {
+    my ($self, @recIds) = @_;
+    my $body = $self->buildSoapBody('GetBulkDeliveries',
+    [
+        ['recIds', 'long', @recIds]
+    ]);
+
+    $self->makeRequest(_newBulksURL, $body);
+}
+
+sub GetBulkDeliveries2 {
+    my ($self, $recId) = @_;
+    my $body = $self->buildSoapBody('GetBulkDeliveries2',
+    [
+        ['recId', $recId]
+    ]);
+
+    $self->makeRequest(_newBulksURL, $body);
+}
+
+sub GetBulkDetails {
+    my ($self, $bulkdId) = @_;
+    my $body = $self->buildSoapBody('GetBulkDetails',
+    [
+        ['bulkdId', $bulkdId]
+    ]);
+
+    $self->makeRequest(_newBulksURL, $body);
+}
+
+sub SendSmsToContact {
+    my ($self, $message, $title, $from, $groupId, $dateToSend) = @_;
+    my $body = $self->buildSoapBody('SendSmsToContact',
+    [
+        ['message', $message],
+        ['title', $title],
+        ['from', $from],
+        ['groupId', $groupId],
+        ['dateToSend', $dateToSend]
+    ]);
+
+    $self->makeRequest(_newBulksURL, $body);
+}
+
+sub GetSmartSMSDeliveries {
+    my ($self, @Id) = @_;
+    my $body = $self->buildSoapBody('GetSmartSMSDeliveries',
+    [
+        ['Id', 'long', @Id]
+    ]);
+
+    $self->makeRequest(_smartURL, $body);
+}
+
+sub GetSmartSMSDetails {
+    my ($self, $Id) = @_;
+    my $body = $self->buildSoapBody('GetSmartSMSDetails',
+    [
+        ['Id', $Id]
+    ]);
+
+    $self->makeRequest(_smartURL, $body);
+}
+
+sub SendMultipleSmartSMS {
+    my ($self, @to, @text, $from, $fromSupportOne, $fromSupportTwo) = @_;
+    my $body = $self->buildSoapBody('SendMultipleSmartSMS',
+    [
+        ['to', @to],
+        ['text', @text],
+        ['from', $from],
+        ['fromSupportOne', $fromSupportOne],
+        ['fromSupportTwo', $fromSupportTwo]
+    ]);
+
+    $self->makeRequest(_smartURL, $body);
+}
+
+sub SendSmartSMS {
+    my ($self, $to, $text, $from, $fromSupportOne, $fromSupportTwo) = @_;
+    my $body = $self->buildSoapBody('SendSmartSMS',
+    [
+        ['to', $to],
+        ['text', $text],
+        ['from', $from],
+        ['fromSupportOne', $fromSupportOne],
+        ['fromSupportTwo', $fromSupportTwo]
+    ]);
+
+    $self->makeRequest(_smartURL, $body);
+}
+
+sub AddBlackList {
+    my ($self, $number, $type) = @_;
+    my $body = $self->buildSoapBody('AddBlackList',
+    [
+        ['number', $number],
+        ['type', $type]
+    ]);
+
+    $self->makeRequest(_blackListURL, $body);
+}
+
+sub AddMobile {
+    my ($self, $listId, $type, @mobileNumbers, $addBySms) = @_;
+    my $body = $self->buildSoapBody('AddMobile',
+    [
+        ['listId', $listId],
+        ['type', $type],
+        ['mobileNumbers', @mobileNumbers],
+        ['addBySms', $addBySms]
+    ]);
+
+    $self->makeRequest(_blackListURL, $body);
+}
+
+sub GetBlackLists {
+    my ($self) = @_;
+    my $body = $self->buildSoapBody('GetBlackLists', []);
+
+    $self->makeRequest(_blackListURL, $body);
+}
+
+sub GetUserCredit2 {
+    my ($self) = @_;
+    my $body = $self->buildSoapBody('GetUserCredit2', []);
+
+    $self->makeRequest(_usersURL, $body);
+}
+
+1;
 
 # soap tester
-my $soap = new SoapClient( "username", "password");
-print($soap->SendSimpleSMS2('09123456789', '5000...', 'perl soap test', 'false'));
+# my $soap = new SoapClient( "username", "password");
+# print($soap->SendSimpleSMS2('09123456789', '5000...', 'perl soap test', 'false'));
