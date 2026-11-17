@@ -5,6 +5,8 @@ use LWP::UserAgent;
 use HTTP::Request;
 use CGI;
 
+use XML::LibXML;
+
 BEGIN {  # BEGIN means this will all happen at compile time
     package Constants;
 
@@ -57,15 +59,105 @@ sub makeRequest {
     # return ($response->as_string);
 }
 
+sub buildSoapBody {
+    my ($self, $method, $parameters) = @_;
+
+    my $soap_ns = 'http://schemas.xmlsoap.org/soap/envelope/';
+    my $service_ns = 'http://tempuri.org/';
+
+    my $doc = XML::LibXML::Document->new('1.0', 'utf-8');
+
+    my $envelope = $doc->createElementNS(
+        $soap_ns,
+        'soap:Envelope'
+    );
+
+    $envelope->setNamespace(
+        'http://www.w3.org/2001/XMLSchema-instance',
+        'xsi',
+        0
+    );
+
+    $envelope->setNamespace(
+        'http://www.w3.org/2001/XMLSchema',
+        'xsd',
+        0
+    );
+
+    $doc->setDocumentElement($envelope);
+
+    my $body = $doc->createElement('soap:Body');
+    $envelope->appendChild($body);
+
+    my $method_element = $doc->createElementNS(
+        $service_ns,
+        $method
+    );
+
+    $body->appendChild($method_element);
+
+    # Authentication parameters
+    for my $name (qw(username password)) {
+        my $element = $doc->createElement($name);
+
+        $element->appendText(
+            $self->{"_$name"}
+        );
+
+        $method_element->appendChild($element);
+    }
+
+    # Other parameters
+    foreach my $param (@$parameters) {
+
+        my ($name, $type, $value);
+
+        if (@$param == 2) {
+            ($name, $value) = @$param;
+            $type = 'string';
+        } else {
+            ($name, $type, $value) = @$param;
+        }
+
+        my $element = $doc->createElement($name);
+        $method_element->appendChild($element);
+
+        if (ref($value) eq 'ARRAY') {
+
+            foreach my $item (@$value) {
+
+                my $child = $doc->createElement($type);
+                $child->appendText(defined $item ? "$item" : '');
+
+                $element->appendChild($child);
+            }
+
+        } else {
+
+            $element->appendText(
+                defined $value ? "$value" : ''
+            );
+        }
+    }
+
+    return $doc->toString(0);
+}
 
 
 sub SendSimpleSMS2 {
-
+    # TODO: use buildSoapBody for the old methods too
     my( $self, $to, $from, $text, $flash ) = @_;
-    my $method = 'SendSimpleSMS2';
-    my $envelope = "<?xml version=\"1.0\" encoding=\"utf-8\"?><soap:Envelope xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"><soap:Body><$method xmlns=\"http://tempuri.org/\"><username>$self->{_username}</username><password>$self->{_password}</password><to>$to</to><from>$from</from><text>$text</text><isflash>$flash</isflash></$method></soap:Body></soap:Envelope>";
+    my $body = $self->buildSoapBody(
+        'SendSimpleSMS2',
+        [
+            ['to',    $to],
+            ['from',  $from],
+            ['text',  $text],
+            ['isflash', $flash],
+        ]
+    );
 
-    $self->makeRequest(_sendURL, $envelope);
+    $self->makeRequest(_sendURL, $body);
 }
 sub SendSimpleSMS {
 
